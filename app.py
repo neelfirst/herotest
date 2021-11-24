@@ -4,11 +4,6 @@ from dfk import *
 
 app = Flask(__name__)
 
-# hero_list is a json dict list straight from the dfk api
-# leveled_hero_list will also be a json dict list, but stats will be 95% interval tuples instead
-global hero_list = []
-global leveled_hero_list = []
-
 @app.route("/")
 def hello():
   string = "<form method=\"POST\"><input name=\"text\"><input type=\"submit\"></form>"
@@ -25,9 +20,9 @@ def say_hello(name):
   # 1. get all hero stats
   # 2. simulate leveling all heroes
   # 3. get hero stats at level 1
-  hero = getHero(name, hero_list)
+  # hero = getHero(name, hero_list)
   # 4. get hero stat ranges at level 100
-  leveled_hero = getHero(name, leveled_hero_list)
+  # leveled_hero = getHero(name, leveled_hero_list)
   # 5. display
   # 5.1 hero stats at level 1
   # 5.2 bar charts highlight hero stats level 1
@@ -35,6 +30,11 @@ def say_hello(name):
   # 5.4 bar charts highlight hero stat ranges level 100
 
 if __name__ == "__main__":
+
+  # hero_list is a json dict list straight from the dfk api
+  global hero_list
+  # leveled_hero_list will also be a json dict list, but stats will be 95% interval tuples instead
+  global leveled_hero_list
   # before the app starts, index all available heroes
   hero_list = getAllHeroes()
   # remove lag from app, level all heroes in advance

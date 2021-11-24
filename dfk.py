@@ -23,6 +23,7 @@ def getAllHeroes():
     vars = {'I': i}
     r = requests.post(URL, json={'query': QUERY, 'variables': vars}).json()['data']['heros']
     results.extend(r)
+    print(i)
   return results
 
 def levelAllHeroes():
