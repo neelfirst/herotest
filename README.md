@@ -8,22 +8,26 @@ The original effort that inspired this project focused on the leveling aspect of
 
 It would be ineffective to generate one all-consuming score to evaluate three distinct areas of expertise. Therefore three different scores are proposed here.
 
-1. Professionalism - how suitable is a hero at a given profession? This is largely addressed by [1,2].
-1.1 Mining
-1.2 Gardening
-1.3 Fishing
-1.4 Foraging
-2. Summoning - how suitable is a hero for creating maximally beneficial new heroes? A ranking algorithm is proposed here based on summon cost and cooldown.
-3. Combat - how suitable is a hero at a particular combat expertise? This follows the leveling algorithms described in [2] but are applied across different combinations more appropriate for PVP.
-1.1 Tank
-1.2 Rogue
-1.3 Mage
-1.4 Support
-
-# Methodology
 ## Professionalism
+How suitable is a hero at a given profession? This is largely addressed by [1,2] and it is used unchanged here.
+* Mining - KWPS(STR, END)
+* Gardening - KWPS(WIS, VIT)
+* Fishing - KWPS(AGI, LUC)
+* Foraging - KWPS(DEX, INT)
+## Combat
+How suitable is a hero at a particular combat expertise? This follows the leveling algorithms described in [2] but are applied across different combinations more appropriate for PVP.
+* Tank - KWPS(STR, END, VIT, HP)
+* Rogue - KWPS(AGI, DEX, VIT)
+* Mage - KWPS(WIS, INT, MP)
+* Support
+## Summoning
+How suitable is a hero for creating maximally beneficial new heroes? A ranking algorithm is proposed here based on summon cost and cooldown.
+* Summons remaining
+* Average cost per summon
+* Level
 
 
 # References
-[1] https://www.reddit.com/r/DefiKingdoms/comments/qpotgf/analysis_on_profession/
-[2] https://kingdom.watch/about/heroranking
+[1] https://www.reddit.com/r/DefiKingdoms/comments/qpotgf/analysis_on_profession/<br>
+[2] https://kingdom.watch/about/heroranking<br>
+[3] https://docs.defikingdoms.com/learn/gameplay/leveling<br>
