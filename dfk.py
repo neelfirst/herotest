@@ -3,6 +3,8 @@
 import requests, json
 from time import sleep
 from querydfk import BATCH_QUERY
+import numpy, pandas, io
+import matplotlib.pyplot as plt
 
 URL = 'https://graph2.defikingdoms.com/subgraphs/name/defikingdoms/apiv5'
 N_HEROES = 45000 # would be lovely to retrieve this value from the api
@@ -41,3 +43,17 @@ class LeveledHero {
 
 def levelAllHeroes(hero_list):
   return
+
+# stat: string name
+# hero_id: our query
+# df_hero: pandas df of hero_list
+def getBarChart(stat, hero, df_hero):
+  xy = {}
+  xy[stat] = df_hero[stat]
+  xy['count'] = df_hero[stat].value_counts()
+  df_plot = pandas.DataFrame(xy)
+
+  buf = io.BytesIO()
+  ax = df_plot.plot.bar(x=stat, y='count', rot=0, savefig=buf)
+  buf.seek(0)
+  return buf
