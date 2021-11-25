@@ -36,8 +36,10 @@ if __name__ == "__main__":
   # leveled_hero_list will also be a json dict list, but stats will be 95% interval tuples instead
   global leveled_hero_list
   # before the app starts, index all available heroes
-  hero_list = getAllHeroes()
+  # data.txt indexes the first 44089 heroes (scraped 2021-11-24)
+  with open ('data.txt', 'r') as f:
+    hero_list = json.load(f)
   # remove lag from app, level all heroes in advance
-  leveled_hero_list = levelAllHeroes()
+  leveled_hero_list = levelAllHeroes(hero_list)
   # then run the app
   app.run()
