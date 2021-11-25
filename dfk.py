@@ -37,8 +37,7 @@ class LeveledHero {
     self.luc = (hero['luck'], 0)
     self.hp  = (hero['hp'], 0)
     self.mp  = (hero['mp'], 0)
-
-  def level_up(self):
+}
 
 def levelAllHeroes(hero_list):
   return
