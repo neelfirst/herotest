@@ -1,8 +1,28 @@
-import os, io, pandas
+import os, io, pandas, sys
+import matplotlib.pyplot as plt
 from flask import Flask, request, url_for, render_template, send_file, redirect
 from dfk import *
 
 app = Flask(__name__)
+# before the app starts, index all available heroes
+# data.txt indexes the first 44089 heroes (scraped 2021-11-24)
+hero_list = json.load(open('data.txt','r'))
+df_hero = pandas.DataFrame(hero_list)
+sys.stdout.flush()
+print(df_hero['strength'])
+
+# stat: string name
+# hero_id: our query
+def getBarChart(stat, hero):
+  xy = {}
+  xy['stat'] = df_hero[stat]
+  xy['count'] = df_hero[stat].value_counts()
+  df_plot = pandas.DataFrame(xy)
+  buf = io.BytesIO()
+  ax = df_plot.plot.bar(rot=0)
+  plt.savefig(buf)
+  buf.seek(0)
+  return buf
 
 def generatePage(name, images):
   string = "<html><head><title>"+name+"</title></head><body>"
@@ -28,20 +48,14 @@ def search():
 @app.route("/<string:name>/")
 def say_hello(name):
   images = []
-  images.append(getBarChart('strength', name, df_hero)
+  images.append(getBarChart('strength', name))
   return generatePage('test', images)
 
-if __name__ == "__main__":
-
-  global df_hero
-  global leveled_hero_list
-  # before the app starts, index all available heroes
-  # data.txt indexes the first 44089 heroes (scraped 2021-11-24)
-  with open ('data.txt', 'r') as f:
-    hero_list = json.load(f)
-    df_hero = pandas.DataFrame(hero_list)
+def main():
   # remove lag from app, level all heroes in advance
   # leveled_hero_list = levelAllHeroes(hero_list)
   # then run the app
   app.run()
 
+if __name__ == "__main__":
+  main()

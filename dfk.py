@@ -25,7 +25,7 @@ def getAllHeroes():
 # input: a list of dicts, each dict is a hero object from DFK API
 # output: tuple (mean, variance) for each of the 8 base stats + hp/mp
 # going with binomial distribution here - so (np, np(1-p))
-class LeveledHero {
+class LeveledHero:
   def __init__ (self, hero):
     self.level = 1
 
@@ -39,21 +39,6 @@ class LeveledHero {
     self.luc = (hero['luck'], 0)
     self.hp  = (hero['hp'], 0)
     self.mp  = (hero['mp'], 0)
-}
 
 def levelAllHeroes(hero_list):
   return
-
-# stat: string name
-# hero_id: our query
-# df_hero: pandas df of hero_list
-def getBarChart(stat, hero, df_hero):
-  xy = {}
-  xy[stat] = df_hero[stat]
-  xy['count'] = df_hero[stat].value_counts()
-  df_plot = pandas.DataFrame(xy)
-
-  buf = io.BytesIO()
-  ax = df_plot.plot.bar(x=stat, y='count', rot=0, savefig=buf)
-  buf.seek(0)
-  return buf
