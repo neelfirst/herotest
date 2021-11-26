@@ -14,14 +14,43 @@ with open('data.txt','r') as f:
   hero_list = json.load(f)
 df_hero = pandas.DataFrame(hero_list)
 
+def match(stat_short, stat_name):
+  if stat_short == 'STR':
+    return stat_name == 'strength'
+  if stat_short == 'END':
+    return stat_name == 'endurance'
+  if stat_short == 'WIS':
+    return stat_name == 'wisdom'
+  if stat_short == 'VIT':
+    return stat_name == 'vitality'
+  if stat_short == 'DEX':
+    return stat_name == 'dexterity'
+  if stat_short == 'INT':
+    return stat_name == 'intelligence'
+  if stat_short == 'AGI':
+    return stat_name == 'agility'
+  if stat_short == 'LCK':
+    return stat_name == 'luck'
+
 # stat: string hero_id
 # hero_id: our query
 def getBarChart(stat, hero_id, data):
+  hero = df_hero.iloc[int(hero_id)]
   stat_keys = data[stat].value_counts().sort_index(ascending=True).keys().astype('str')
   stat_counts = data[stat].value_counts().sort_index(ascending=True).values
   buf = io.BytesIO()
-  c = ['r' if (df_hero.iloc[int(hero_id)][stat] == int(x)) else 'b' for x in stat_keys]
-#  plt.figure(figsize=(3.5,2))
+  c = ['r' if (hero[stat] == int(x)) else 'b' for x in stat_keys]
+  # apply stat boost borders
+  if match(hero['statBoost1'],stat) and match(hero['statBoost2'],stat):
+    plt.figure(linewidth=4, edgecolor='m')
+  elif match(hero['statBoost1'],stat):
+    plt.figure(linewidth=4, edgecolor='g')
+  elif match(hero['statBoost2'],stat):
+    plt.figure(linewidth=4, edgecolor='c')
+  elif hero['profession'] == stat:
+    plt.figure(linewidth=4, edgecolor='g')
+  else:
+    plt.figure(linewidth=4, edgecolor='w')
   plt.bar(stat_keys, stat_counts, color=c)
   plt.title(stat)
   plt.savefig(buf)
