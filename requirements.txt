@@ -1,0 +1,7 @@
+Flask
+jinja2
+numpy
+pandas
+matplotlib
+requests
+json
