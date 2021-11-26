@@ -54,7 +54,7 @@ def say_hello(hero_id):
     images.append(getBarChart(stat, hero_id, df_hero))
   return generatePage(hero_id, images)
 
-@app.route("/<int:hero_id>", methods=['POST'])
+@app.route("/<int:hero_id>/", methods=['POST'])
 def filter(hero_id):
   return redirect(url_for('filterPage', hero_id = hero_id, filter = request.form['text']))
 
