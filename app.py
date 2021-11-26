@@ -1,14 +1,14 @@
 import os, io, pandas, sys, statistics
 import matplotlib.pyplot as plt
 from flask import Flask, request, url_for, render_template, send_file, redirect
-from dfk import *
 
 STAT_LIST = ['strength', 'endurance', 'agility', 'luck', 'dexterity', 'intelligence', 'wisdom', 'vitality']
 
 app = Flask(__name__)
 # before the app starts, index all available heroes
-# data.txt indexes the first 44089 heroes (scraped 2021-11-24)
-hero_list = json.load(open('data.txt','r'))
+# data.txt is irregularly updated by 'batchdfk.main()' 2021-11-26 N
+with open('data.txt','r') as f:
+  hero_list = json.load(f)
 df_hero = pandas.DataFrame(hero_list)
 
 # stat: string name
