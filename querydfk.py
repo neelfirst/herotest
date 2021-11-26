@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import json, requests
+from time import sleep
 
 # batch query of 100 heroes
 BATCH_QUERY = """query getHeroInfo($I: Int) {
