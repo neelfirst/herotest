@@ -14,23 +14,24 @@ df_hero = pandas.DataFrame(hero_list)
 # stat: string name
 # hero_id: our query
 def getBarChart(stat, hero_id):
-  xy = {}
-  xy[stat] = df_hero[stat].value_counts().sort_index(ascending=True).keys()
-  xy['count'] = df_hero[stat].value_counts().sort_index(ascending=True).values
+  stat_keys = df_hero[stat].value_counts().sort_index(ascending=True).keys().astype('str')
+  stat_counts = df_hero[stat].value_counts().sort_index(ascending=True).values
   buf = io.BytesIO()
-  c = ['r' if (df_hero.iloc[int(hero_id)][stat] == x) else 'b' for x in xy[stat]]
-  ax = pandas.DataFrame(xy).plot.bar(x=stat, y='count', color=c, rot=0, figsize=(1,1))
+  c = ['r' if (df_hero.iloc[int(hero_id)][stat] == int(x)) else 'b' for x in stat_keys]
+  plt.figure(figsize=(3.5,2))
+  plt.bar(stat_keys, stat_counts, color=c)
+  plt.title(stat)
   plt.savefig(buf)
   buf.seek(0)
   return buf
 
 def generatePage(name, images):
-  string = "<html><head><title>"+name+"</title></head><body>"
+  string = "<html><head><title>"+str(name)+"</title></head><body>"
   for i in range(0,len(images)):
-    p = os.path.join(os.getcwd(), 'static',  name + '_' + str(i) + '.png')
+    p = os.path.join(os.getcwd(), 'static',  str(name) + '_' + str(i) + '.png')
     with open(p,'wb') as ifile:
       ifile.write(images[i].read())
-    img = url_for('static', filename=name+'_'+str(i)+'.png')
+    img = url_for('static', filename=str(name)+'_'+str(i)+'.png')
     string += "<img src=\""+img+"\"><br>"
   string += "</body></html>"
   return(string)
@@ -45,7 +46,7 @@ def search():
   return redirect(url_for('say_hello', name = request.form['text']))
 
 # this is where the action is
-@app.route("/<string:name>/")
+@app.route("/<int:name>/")
 def say_hello(name):
   images = []
   for stat in STAT_LIST:
