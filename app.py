@@ -74,7 +74,7 @@ def hello():
 
 @app.route("/", methods=['POST'])
 def search():
-  return redirect(url_for('say_hello', hero_id = request.form['text']))
+  return redirect(url_for('filter_hero', hero_id = request.form['text']))
 
 @app.route("/<int:hero_id>/", methods=['POST'])
 @app.route("/<int:hero_id>/<string:filter>/", methods=['POST'])
