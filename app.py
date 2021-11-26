@@ -23,19 +23,18 @@ def getBarChart(stat, hero_id, data):
   plt.title(stat)
   plt.savefig(buf)
   buf.seek(0)
-  return buf
+  rval = {}
+  rval[stat] = buf
+  return rval
 
 def generatePage(hero_id, images):
-  string = "<html><head><title>"+str(hero_id)+"</title></head><body>"
-  string += "<form method=\"POST\"><input name=\"text\"><input type=\"submit\"></form>"
   for i in range(0,len(images)):
     p = os.path.join(os.getcwd(), 'static',  str(hero_id) + '_' + str(i) + '.png')
     with open(p,'wb') as ifile:
       ifile.write(images[i].read())
     img = url_for('static', filename=str(hero_id)+'_'+str(i)+'.png')
     string += "<img src=\""+img+"\"><br>"
-  string += "</body></html>"
-  return(string)
+  return render_template('result.html', hero_id = hero_id, hero = charts)
 
 @app.route("/")
 def hello():
