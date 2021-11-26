@@ -23,18 +23,17 @@ def getBarChart(stat, hero_id, data):
   plt.title(stat)
   plt.savefig(buf)
   buf.seek(0)
-  rval = {}
-  rval[stat] = buf
-  return rval
+  return buf
 
 def generatePage(hero_id, images):
-  for i in range(0,len(images)):
-    p = os.path.join(os.getcwd(), 'static',  str(hero_id) + '_' + str(i) + '.png')
+  filenames = {}
+  for image in images:
+    f = str(hero_id) + '_' + image + '.png'
+    p = os.path.join(os.getcwd(), 'static', f)
     with open(p,'wb') as ifile:
-      ifile.write(images[i].read())
-    img = url_for('static', filename=str(hero_id)+'_'+str(i)+'.png')
-    string += "<img src=\""+img+"\"><br>"
-  return render_template('result.html', hero_id = hero_id, hero = charts)
+      ifile.write(images[image].read())
+    filenames[image] = url_for('static', filename = f)
+  return render_template('result.html', hero_id = hero_id, hero = filenames)
 
 @app.route("/")
 def hello():
@@ -47,9 +46,9 @@ def search():
 # this is where the action is
 @app.route("/<int:hero_id>/")
 def say_hello(hero_id):
-  images = []
+  images = {}
   for stat in STAT_LIST:
-    images.append(getBarChart(stat, hero_id, df_hero))
+    images[stat] = getBarChart(stat, hero_id, df_hero)
   return generatePage(hero_id, images)
 
 @app.route("/<int:hero_id>/", methods=['POST'])
@@ -58,10 +57,10 @@ def filter(hero_id):
 
 @app.route("/<int:hero_id>/<string:filter>/")
 def filterPage(hero_id, filter):
-  images = []
+  images = {}
   df_filter = df_hero.loc[df_hero[filter]==df_hero.iloc[int(hero_id)][filter]]
   for stat in STAT_LIST:
-    images.append(getBarChart(stat, hero_id, df_filter))
+    images[stat] = getBarChart(stat, hero_id, df_filter)
   return generatePage(hero_id, images)
 
 def main():
