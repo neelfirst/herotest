@@ -1,4 +1,4 @@
-import os, io, pandas, sys
+import os, io, pandas, sys, statistics
 import matplotlib.pyplot as plt
 from flask import Flask, request, url_for, render_template, send_file, redirect
 from dfk import *
@@ -13,12 +13,13 @@ df_hero = pandas.DataFrame(hero_list)
 
 # stat: string name
 # hero_id: our query
-def getBarChart(stat, hero):
+def getBarChart(stat, hero_id):
   xy = {}
   xy[stat] = df_hero[stat].value_counts().sort_index(ascending=True).keys()
   xy['count'] = df_hero[stat].value_counts().sort_index(ascending=True).values
   buf = io.BytesIO()
-  ax = pandas.DataFrame(xy).plot.bar(x=stat, y='count', rot=0)
+  c = ['r' if (df_hero.iloc[int(hero_id)][stat] == x) else 'b' for x in xy[stat]]
+  ax = pandas.DataFrame(xy).plot.bar(x=stat, y='count', color=c, rot=0)
   plt.savefig(buf)
   buf.seek(0)
   return buf
