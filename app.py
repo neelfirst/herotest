@@ -2,7 +2,10 @@ import os, io, pandas, sys, json
 import matplotlib.pyplot as plt
 from flask import Flask, request, url_for, render_template, send_file, redirect
 
-STAT_LIST = ['strength', 'endurance', 'agility', 'luck', 'dexterity', 'intelligence', 'wisdom', 'vitality']
+STAT_LIST = ['strength', 'endurance', 'mining', \
+             'agility', 'luck', 'fishing', \
+             'dexterity', 'intelligence', 'foraging', \
+             'wisdom', 'vitality', 'gardening']
 
 app = Flask(__name__)
 # before the app starts, index all available heroes
@@ -18,10 +21,11 @@ def getBarChart(stat, hero_id, data):
   stat_counts = data[stat].value_counts().sort_index(ascending=True).values
   buf = io.BytesIO()
   c = ['r' if (df_hero.iloc[int(hero_id)][stat] == int(x)) else 'b' for x in stat_keys]
-  plt.figure(figsize=(3.5,2))
+#  plt.figure(figsize=(3.5,2))
   plt.bar(stat_keys, stat_counts, color=c)
   plt.title(stat)
   plt.savefig(buf)
+  plt.clf()
   buf.seek(0)
   return buf
 
