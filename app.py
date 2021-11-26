@@ -39,8 +39,7 @@ def generatePage(hero_id, images):
 
 @app.route("/")
 def hello():
-  string = "<form method=\"POST\"><input name=\"text\"><input type=\"submit\"></form>"
-  return(string)
+  return render_template('index.html')
 
 @app.route("/", methods=['POST'])
 def search():
