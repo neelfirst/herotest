@@ -76,22 +76,20 @@ def hello():
 def search():
   return redirect(url_for('say_hello', hero_id = request.form['text']))
 
-# this is where the action is
-@app.route("/<int:hero_id>/")
-def say_hello(hero_id):
-  images = {}
-  for stat in STAT_LIST:
-    images[stat] = getBarChart(stat, hero_id, df_hero)
-  return generatePage(hero_id, images)
-
 @app.route("/<int:hero_id>/", methods=['POST'])
-def filter(hero_id):
+@app.route("/<int:hero_id>/<string:filter>"/, methods=['POST'])
+def filter_hero(hero_id, filter=None):
   return redirect(url_for('filterPage', hero_id = hero_id, filter = request.form['text']))
 
+# this is where the action is
+@app.route("/<int:hero_id>/")
 @app.route("/<int:hero_id>/<string:filter>/")
-def filterPage(hero_id, filter):
+def filterPage(hero_id, filter=None):
   images = {}
-  df_filter = df_hero.loc[df_hero[filter]==df_hero.iloc[int(hero_id)][filter]]
+  if filter:
+    df_filter = df_hero.loc[df_hero[filter]==df_hero.iloc[int(hero_id)][filter]]
+  else:
+    df_filter = df_hero
   for stat in STAT_LIST:
     images[stat] = getBarChart(stat, hero_id, df_filter)
   return generatePage(hero_id, images)
